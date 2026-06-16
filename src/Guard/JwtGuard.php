@@ -90,7 +90,7 @@ class JwtGuard extends AbstractAuthGuard
             if ($result instanceof UnauthorizedException) {
                 throw $result;
             }
-            return $result ?: null;
+            return $result ?? null;
         }
 
         try {
@@ -98,7 +98,7 @@ class JwtGuard extends AbstractAuthGuard
                 $jwt = $this->getJwtManager()->parse($token);
                 $uid = $jwt->getPayload()['uid'] ?? null;
                 $user = $uid ? $this->userProvider->retrieveByCredentials($uid) : null;
-                Context::set($key, $user ?: 0);
+                Context::set($key, $user ?? 0);
 
                 return $user;
             }
@@ -139,7 +139,7 @@ class JwtGuard extends AbstractAuthGuard
      */
     public function refresh(?string $token = null): ?string
     {
-        $token = $token ?: $this->parseToken();
+        $token = $token ?? $this->parseToken();
 
         if ($token) {
             Context::set($this->resultKey($token), null);
@@ -158,7 +158,7 @@ class JwtGuard extends AbstractAuthGuard
         return null;
     }
 
-    public function logout($token = null)
+    public function logout(?string $token = null)
     {
         if ($token = $token ?? $this->parseToken()) {
             Context::set($this->resultKey($token), null);
@@ -170,7 +170,7 @@ class JwtGuard extends AbstractAuthGuard
         return false;
     }
 
-    public function getPayload($token = null): ?array
+    public function getPayload(?string $token = null): ?array
     {
         if ($token = $token ?? $this->parseToken()) {
             return $this->getJwtManager()->justParse($token)->getPayload();
@@ -183,7 +183,7 @@ class JwtGuard extends AbstractAuthGuard
         return $this->jwtManager;
     }
 
-    public function id($token = null)
+    public function id(?string $token = null)
     {
         if ($token = $token ?? $this->parseToken()) {
             return $this->getJwtManager()->parse($token)->getPayload()['uid'];

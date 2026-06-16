@@ -30,7 +30,7 @@ class AuthCommand extends HyperfCommand
         $this->gen('SIMPLE_JWT_SECRET');
     }
 
-    public function gen($key, string $value = null)
+    public function gen($key, ?string $value = null)
     {
         if (empty(env($key))) {
             file_put_contents(BASE_PATH . '/.env', sprintf(PHP_EOL . '%s=%s', $key, $value ?? str_random(16)), FILE_APPEND);

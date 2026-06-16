@@ -52,7 +52,7 @@ class SessionGuard extends AbstractAuthGuard
             if ($result instanceof \Throwable) {
                 throw $result;
             }
-            return $result ?: null;
+            return $result ?? null;
         }
 
         try {

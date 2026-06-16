@@ -46,9 +46,9 @@ class SsoGuard extends JwtGuard
         return $this->config['clients'] ?? ['unknown'];
     }
 
-    public function login(Authenticatable $user, array $payload = [], string $client = null)
+    public function login(Authenticatable $user, array $payload = [], ?string $client = null)
     {
-        $client = $client ?: $this->getClients()[0]; // 需要至少配置一个客户端
+        $client = $client ?? $this->getClients()[0]; // 需要至少配置一个客户端
         $token = parent::login($user, $payload);
         $redisKey = str_replace('{uid}', (string) $user->getId(), $this->config['redis_key'] ?? 'u:token:{uid}');
 
@@ -64,12 +64,12 @@ class SsoGuard extends JwtGuard
         return $token;
     }
 
-    public function refresh(?string $token = null, string $client = null): ?string
+    public function refresh(?string $token = null, ?string $client = null): ?string
     {
         $token = parent::refresh($token);
 
         if ($token) {
-            $client = $client ?: $this->getClients()[0]; // 需要至少配置一个客户端
+            $client = $client ?? $this->getClients()[0]; // 需要至少配置一个客户端
             $redisKey = str_replace('{uid}', (string) $this->id($token), $this->config['redis_key'] ?? 'u:token:{uid}');
             $this->redis->hSet($redisKey, $client, $token);
         }

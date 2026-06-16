@@ -20,7 +20,7 @@ class UnauthorizedException extends AuthException
 
     protected int $statusCode = 401;
 
-    public function __construct(string $message, AuthGuard $guard = null, Throwable $previous = null)
+    public function __construct(string $message, ?AuthGuard $guard = null, ?Throwable $previous = null)
     {
         parent::__construct($message, 401, $previous);
         $this->guard = $guard;
